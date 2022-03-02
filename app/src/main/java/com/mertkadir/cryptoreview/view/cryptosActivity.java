@@ -2,24 +2,47 @@ package com.mertkadir.cryptoreview.view;
 
 import static android.os.Build.VERSION_CODES.R;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mertkadir.cryptoreview.R;
 import com.mertkadir.cryptoreview.adapter.RecyclerViewAdapter;
 import com.mertkadir.cryptoreview.databinding.ActivityCryptosBinding;
 import com.mertkadir.cryptoreview.model.CryptoModel;
 import com.mertkadir.cryptoreview.service.CryptoAPI;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.Timed;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +58,8 @@ public class cryptosActivity extends AppCompatActivity {
     Retrofit retrofit;
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
+    private Handler handler;
+    private Runnable runnable;
 
 
 
@@ -57,8 +82,37 @@ public class cryptosActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        loadData();
-    }
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+               try {
+
+                   Timer timer = new Timer();
+
+                   timer.scheduleAtFixedRate(new TimerTask() {
+                                                 @Override
+                                                 public void run() {
+                                                     loadData();
+                                                 }
+                                             },
+                           1000, 1000);
+
+               }catch (Exception e) {
+
+               }
+            }
+        }).start();
+
+
+
+
+
+}
+
+
+
 
     private void  loadData() {
 
@@ -79,11 +133,7 @@ public class cryptosActivity extends AppCompatActivity {
                     recyclerViewAdapter = new RecyclerViewAdapter(cryptoModels);
                     recyclerView.setAdapter(recyclerViewAdapter);
 
-                    /*
-                    for (CryptoModel cryptoModel : cryptoModels) {
-                        System.out.println(cryptoModel.currency);
-                    }
-                    */
+
                 }
             }
 
@@ -92,6 +142,16 @@ public class cryptosActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+
+    }
+
+    public void cryptoDetail(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        DetailsFragment detailsFragment = new DetailsFragment();
+        fragmentTransaction.replace(com.mertkadir.cryptoreview.R.id.frame_layout,detailsFragment);
+
 
     }
 

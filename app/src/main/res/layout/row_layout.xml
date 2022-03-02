@@ -13,6 +13,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_bold"
+        android:onClick="cryptoDetail"
         android:textAlignment="viewStart"
         android:textColor="#FBFBFB"
         android:textSize="16sp"
