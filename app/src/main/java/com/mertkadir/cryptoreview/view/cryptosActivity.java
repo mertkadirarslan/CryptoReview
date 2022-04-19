@@ -9,16 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
-import android.os.CountDownTimer;
+
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
-import android.widget.Toast;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,21 +25,13 @@ import com.mertkadir.cryptoreview.databinding.ActivityCryptosBinding;
 import com.mertkadir.cryptoreview.model.CryptoModel;
 import com.mertkadir.cryptoreview.service.CryptoAPI;
 
-import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.schedulers.Timed;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -97,7 +86,7 @@ public class cryptosActivity extends AppCompatActivity {
                                                      loadData();
                                                  }
                                              },
-                           1000, 1000);
+                           6000, 6000);
 
                }catch (Exception e) {
 
@@ -106,12 +95,7 @@ public class cryptosActivity extends AppCompatActivity {
         }).start();
 
 
-
-
-
 }
-
-
 
 
     private void  loadData() {
@@ -123,6 +107,7 @@ public class cryptosActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<List<CryptoModel>>() {
             @Override
+
             public void onResponse(Call<List<CryptoModel>> call, Response<List<CryptoModel>> response) {
                 if(response.isSuccessful()) {
                     List<CryptoModel> responseList = response.body();
@@ -150,11 +135,10 @@ public class cryptosActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         DetailsFragment detailsFragment = new DetailsFragment();
-        fragmentTransaction.replace(com.mertkadir.cryptoreview.R.id.frame_layout,detailsFragment);
+        fragmentTransaction.add(com.mertkadir.cryptoreview.R.id.frame_layout,detailsFragment).commit();
 
 
     }
-
 
 
 }
